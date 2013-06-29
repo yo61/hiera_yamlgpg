@@ -1,5 +1,5 @@
 name    'onlynone-hiera_yamlgpg'
-version '0.1.1'
+version '0.1.2'
 author 'onlynone'
 license 'Apache License, Version 2.0'
 summary 'Provides a hiera backend that decrypts gpg encrypted values in yaml
