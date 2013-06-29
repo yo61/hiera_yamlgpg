@@ -15,7 +15,7 @@ class Hiera
                 real_home = homes.detect { |h| ENV[h] != nil }
 
                 key_dir = Config[:yamlgpg][:key_dir] || "#{ENV[real_home]}/.gnupg"
-                ENV["GNUPGHOME"]=key_dir
+                GPGME::Engine.home_dir = key_dir
                 @ctx = GPGME::Ctx.new
 
                 Hiera.debug("Hiera yamlgpg backend starting")
@@ -88,7 +88,7 @@ class Hiera
 
             def decrypt_ciphertext(ciphertext)
                 if @ctx.keys.empty?
-                    raise YamlgpgError, "No usable keys found in #{ENV['GNUPGHOME']}. Check :key_dir value in hiera.yaml is correct"
+                    raise YamlgpgError, "No usable keys found in #{GPGME::Engine.info.first.home_dir}. Check :key_dir value in hiera.yaml is correct"
                 end
 
                 begin
