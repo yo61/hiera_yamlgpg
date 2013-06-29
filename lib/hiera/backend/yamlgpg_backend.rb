@@ -1,5 +1,8 @@
 class Hiera
     module Backend
+        class YamlgpgError < StandardError
+        end
+
         class Yamlgpg_backend
             def initialize
                 require 'yaml'
@@ -10,6 +13,8 @@ class Hiera
 
                 key_dir = Config[:yamlgpg][:key_dir] || "#{ENV[real_home]}/.gnupg"
                 ENV["GNUPGHOME"]=key_dir
+                @ctx = GPGME::Ctx.new
+
                 Hiera.debug("Hiera yamlgpg backend starting")
             end
 
@@ -50,7 +55,7 @@ class Hiera
                             answer = decrypt_any(new_answer)
                             break
                         end
-                    rescue Exception => e
+                    rescue YamlgpgError => e
                         # If there are any exceptions with decryption, then we go on so that
                         # other backends might find a non-encrypted value
                         Hiera.debug(e)
@@ -63,7 +68,7 @@ class Hiera
 
             def decrypt_any(d)
                 if d.kind_of? String
-                    if d.start_with?("-----BEGIN PGP MESSAGE-----\n\n")
+                    if d.match(/^-----BEGIN PGP MESSAGE-----[[:space:]]*\n/)
                         return decrypt_ciphertext(d)
                     else
                         return d
@@ -79,24 +84,20 @@ class Hiera
             end
 
             def decrypt_ciphertext(ciphertext)
-                ctx = GPGME::Ctx.new
-
-                if !ctx.keys.empty?
-                    raw = GPGME::Data.new(ciphertext)
-
-                    begin
-                        txt = ctx.decrypt(raw)
-                    rescue GPGME::Error::DecryptFailed => e
-                        raise Exception, "Warning: GPG Decryption failed, check your GPG settings"
-                    rescue => e
-                        raise Exception, "Warning: General exception decrypting GPG file"
-                    end
-
-                    txt.seek 0
-                    return txt.read
-                else
-                    raise Exception, "No usable keys found in #{ENV['GNUPGHOME']}. Check :key_dir value in hiera.yaml is correct"
+                if @ctx.keys.empty?
+                    raise YamlgpgError, "No usable keys found in #{ENV['GNUPGHOME']}. Check :key_dir value in hiera.yaml is correct"
                 end
+
+                begin
+                    txt = @ctx.decrypt(GPGME::Data.new(ciphertext))
+                rescue GPGME::Error::DecryptFailed => e
+                    raise YamlgpgError, "GPG Decryption failed, check your GPG settings: #{e}"
+                rescue Exception => e
+                    raise YamlgpgError, "General exception decrypting GPG file: #{e}"
+                end
+
+                txt.seek 0
+                return txt.read
             end
         end
     end
