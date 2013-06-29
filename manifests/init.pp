@@ -1,6 +1,6 @@
-# == Class: hiera-yamlgpg
+# == Class: hiera_yamlgpg
 #
-# Full description of class hiera-yamlgpg here.
+# Full description of class hiera_yamlgpg here.
 #
 # === Parameters
 #
@@ -23,7 +23,7 @@
 #
 # === Examples
 #
-#  class { hiera-yamlgpg:
+#  class { hiera_yamlgpg:
 #    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
 #  }
 #
@@ -35,7 +35,7 @@
 #
 # Copyright 2013 Your name here, unless otherwise noted.
 #
-class hiera-yamlgpg {
+class hiera_yamlgpg {
 
 
 }

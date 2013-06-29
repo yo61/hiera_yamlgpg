@@ -1,4 +1,4 @@
-hiera-yamlgpg
+hiera_yamlgpg
 =============
 
 Decrypt Hiera YAML values encrypted with GPG
@@ -30,4 +30,4 @@ onlynone@gmail.com
 Support
 -------
 
-Please log tickets and issues at our [Projects site](https://github.com/onlynone/hiera-yamlgpg)
+Please log tickets and issues at our [Projects site](https://github.com/onlynone/hiera_yamlgpg)
