@@ -14,7 +14,7 @@ class Hiera
             end
 
             def lookup(key, scope, order_override, resolution_type)
-                answer = Backend.empty_answer(resolution_type)
+                answer = nil
 
                 Hiera.debug("Looking up #{key} in yamlgpg backend")
 
@@ -40,9 +40,11 @@ class Hiera
                         case resolution_type
                         when :array
                             raise Exception, "Hiera type mismatch: expected Array and got #{new_answer.class}" unless new_answer.kind_of? Array or new_answer.kind_of? String
+                            answer ||= []
                             answer << decrypt_any(new_answer)
                         when :hash
                             raise Exception, "Hiera type mismatch: expected Hash and got #{new_answer.class}" unless new_answer.kind_of? Hash
+                            answer ||= {}
                             answer = decrypt_any(new_answer).merge answer
                         else
                             answer = decrypt_any(new_answer)

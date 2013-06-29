@@ -1,0 +1,11 @@
+:hierarchy:
+ - secrets
+
+:backends:
+ - yamlgpg
+
+:yamlgpg:
+    :datadir: hieradata
+    :key_dir: keys
+
+:logger: console
