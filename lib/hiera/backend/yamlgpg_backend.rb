@@ -3,6 +3,9 @@ class Hiera
         class YamlgpgError < StandardError
         end
 
+        # A hiera backend to decrypt yaml values, inspiration and idea to use
+        # gpgme comes from https://github.com/crayfishx/hiera-gpg and basic
+        # structure comes from the builtin yaml hiera backend.
         class Yamlgpg_backend
             def initialize
                 require 'yaml'
