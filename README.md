@@ -43,7 +43,7 @@ Use
 Create a public and private key with `gpg --gen-key` then encrypt some text with:
 
     echo -n 'Some Text' \
-      | gpg --armor --encrypt -r hiera-yamlgpg \
+      | gpg --armor --encrypt \
       > encrypted_file.gpg
 
 Then create a yaml file `hieradata/secret.yaml` as:
