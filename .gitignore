@@ -1,4 +1,4 @@
 *~
 *.orig
 *.rej
-/test/keys/trustdb.gpg
+/tests/keys/trustdb.gpg
