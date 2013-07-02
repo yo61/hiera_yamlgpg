@@ -7,7 +7,7 @@ class Hiera
         # gpgme comes from https://github.com/crayfishx/hiera-gpg and basic
         # structure comes from the builtin yaml hiera backend.
         class Yamlgpg_backend
-            def initialize
+            def initialize(cache=nil)
                 require 'yaml'
                 require 'gpgme'
 
@@ -17,6 +17,7 @@ class Hiera
                 key_dir = Config[:yamlgpg][:key_dir] || "#{ENV[real_home]}/.gnupg"
                 GPGME::Engine.home_dir = key_dir
                 @ctx = GPGME::Ctx.new
+                @cache = cache || Filecache.new
 
                 Hiera.debug("Hiera yamlgpg backend starting")
             end
@@ -31,7 +32,9 @@ class Hiera
 
                     yamlfile = Backend.datafile(:yamlgpg, scope, source, "yaml") || next
 
-                    data = YAML.load_file(yamlfile)
+                    data = @cache.read(yamlfile, Hash, {}) do |data|
+                        YAML.load(data)
+                    end
 
                     next if ! data
                     next if data.empty?
