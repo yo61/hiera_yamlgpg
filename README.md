@@ -3,8 +3,8 @@ Introduction
 
 Decrypt Hiera YAML values encrypted with GPG.
 
-Details
-=======
+Background
+==========
 
 Inspiration for this project came from
 [hiera-gpg](https://github.com/crayfishx/hiera-gpg). But hiera_yamlgpg gives
@@ -40,20 +40,18 @@ The only requirement is that gpgme is installed:
 Use
 ===
 
-TLDR
-----
-You already have public/private gpg keys set up, you know what you're doing,
-you just want to use it.
+#### TLDR:
+(You already have public/private gpg keys set up, you know what you're doing,
+you just want to use it.)
 
-Add `yamlgpg` to your hiera `:backends`. Specify a ':key_dir` under the
+Add `yamlgpg` to your hiera `:backends`. Specify a `:key_dir` under the
 `yamlgpg` section that points to a GnuPG directory (defaults to `~/.gnupg`).
 This backend will process files ending in `.yaml`. Use ascii armor encrypted
 text (encrypted with the pubkey portion of a secret key available under
 `:key_dir`) in the values of any yaml entry and they will be decrypted on the
 fly by hiera.
 
-Details
--------
+#### Details:
 On your puppet master or one of your puppet nodes, create a public and private
 key with:
 
@@ -106,7 +104,7 @@ And then pasting the output of the above into a yaml file so it looks like:
 Make a `hiera.yaml` as:
 
     :hierarchy:
-      - secret
+      - secrets
     
     :backends:
       - yamlgpg
