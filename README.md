@@ -18,7 +18,7 @@ you more flexibility:
  * hiera_yamlgpg will deep dive into hashes and arrays and only attempt to
    decrypt values that are strings.
 
-This means a contributor doesn't your private key to add a new encrypted
+This means a contributor doesn't need your private key to add a new encrypted
 parameter to a yaml file. The **yaml file itself is unencrypted**, only the
 **values are encrypted**. A contributor only needs a public key to add a new
 encrypted value. It also means one can have lists of encrypted values, lists of
@@ -114,7 +114,14 @@ Make a `hiera.yaml` as:
       :key_dir: /etc/puppet/keys # optional, defaults to ~/.gnupg
 
 Then if you run `hiera -c hiera.yaml dbpassword` on a machine that has the
-secret key you should get `secretdbpassword`.
+secret key you should get `secretdbpassword`. You'll need to be root to read
+the keydir, and hiera_yamlgpg will need to be in your ruby library search path,
+so the command might end up looking like this:
+
+    sudo bash -c 'RUBYLIB=/etc/puppet/modules/hiera_yamlgpg/lib hiera -c hiera.yaml dbpassword'
+
+When you use hiera as part of puppet, that path should already be on the load
+path, and the process will be running as root.
 
 License
 =======
