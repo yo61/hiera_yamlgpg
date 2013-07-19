@@ -31,7 +31,7 @@ Installation
 The package is distributed as a puppet module on puppet forge, if you already
 have puppet installed, the module can be installed with:
 
-    puppet module install onlynone/hiera_yamlgpg
+    puppet module install compete/hiera_yamlgpg
 
 The only requirement is that gpgme is installed:
 
@@ -122,8 +122,8 @@ Apache License, Version 2.0
 
 Contact
 =======
-onlynone@gmail.com
+swillis@compete.com
 
 Support
 =======
-Please log tickets and issues at our [Projects site](https://github.com/onlynone/hiera_yamlgpg)
+Please log tickets and issues at our [Projects site](https://github.com/compete/hiera_yamlgpg)
