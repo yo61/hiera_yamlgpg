@@ -45,7 +45,7 @@ Use
 you just want to use it.)
 
 Add `yamlgpg` to your hiera `:backends`. Specify a `:key_dir` under the
-`yamlgpg` section that points to a GnuPG directory (defaults to `~/.gnupg`).
+`:yamlgpg` section that points to a GnuPG directory (defaults to `~/.gnupg`).
 This backend will process files ending in `.yaml`. Use ascii armor encrypted
 text (encrypted with the pubkey portion of a secret key available under
 `:key_dir`) in the values of any yaml entry and they will be decrypted on the
