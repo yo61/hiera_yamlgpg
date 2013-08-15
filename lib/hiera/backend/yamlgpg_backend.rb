@@ -64,7 +64,7 @@ class Hiera
                     rescue YamlgpgError => e
                         # If there are any exceptions with decryption, then we go on so that
                         # other backends might find a non-encrypted value
-                        Hiera.debug(e)
+                        Hiera.warn(e)
                         next
                     end
                 end

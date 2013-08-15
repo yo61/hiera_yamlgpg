@@ -1,5 +1,5 @@
 name    'compete-hiera_yamlgpg'
-version '0.1.5'
+version '0.1.6'
 author 'compete'
 license 'Apache License, Version 2.0'
 summary 'Provides a hiera backend that decrypts gpg encrypted values in yaml
