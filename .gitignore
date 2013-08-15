@@ -2,3 +2,4 @@
 *.orig
 *.rej
 /tests/keys/trustdb.gpg
+/build
