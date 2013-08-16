@@ -112,6 +112,7 @@ Make a `hiera.yaml` as:
     :yamlgpg:
       :datadir: hieradata
       :key_dir: /etc/puppet/keys # optional, defaults to ~/.gnupg
+      :fail_on_error: true       # optional, defaults to false
 
 Then if you run `hiera -c hiera.yaml dbpassword` on a machine that has the
 secret key you should get `secretdbpassword`. You'll need to be root to read
@@ -122,6 +123,10 @@ so the command might end up looking like this:
 
 When you use hiera as part of puppet, that path should already be on the load
 path, and the process will be running as root.
+
+By default, yamlgpg will print a warning and continue if there are any errors
+with decryption. But you can set `:fail_on_error` to `true` to raise an
+exception when there are problems.
 
 License
 =======

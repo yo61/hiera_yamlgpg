@@ -7,5 +7,6 @@
 :yamlgpg:
     :datadir: hieradata
     :key_dir: keys
+    :fail_on_error: true
 
 :logger: console
