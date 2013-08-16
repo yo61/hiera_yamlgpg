@@ -15,6 +15,8 @@ class Hiera
                 real_home = homes.detect { |h| ENV[h] != nil }
 
                 key_dir = Config[:yamlgpg][:key_dir] || "#{ENV[real_home]}/.gnupg"
+                @fail = Config[:yamlgpg][:fail_on_error] || false
+
                 GPGME::Engine.home_dir = key_dir
                 @ctx = GPGME::Ctx.new
                 @cache = cache || Filecache.new
@@ -65,7 +67,11 @@ class Hiera
                         # If there are any exceptions with decryption, then we go on so that
                         # other backends might find a non-encrypted value
                         Hiera.warn(e)
+                      if @fail
+                        raise e
+                      else
                         next
+                      end
                     end
                 end
 
