@@ -37,31 +37,33 @@ def main(argv=ARGV)
     input = File.new(argv[0], "r")
   end
 
-  ctx = GPGME::Ctx.new({:armor => true})
-  data = encrypt_any(options[:recipients], YAML.load(input.read), ctx)
-  YAML.dump(data, $stdout)
+  GPGME::Ctx.new() do |ctx|
+    crypto = GPGME::Crypto.new(:armor => true, :always_trust => true)
+    data = encrypt_any(options[:recipients], YAML.load(input.read), crypto)
+    YAML.dump(data, $stdout)
+  end
 end
 
-def encrypt_any(r, d, ctx)
+def encrypt_any(r, d, crypto)
   if d.kind_of? String
     if !d.match(/^-----BEGIN PGP MESSAGE-----[[:space:]]*\n/)
-      return encrypt_text(r,d,ctx)
+      return encrypt_text(r,d,crypto)
     else
       return d
     end
   elsif d.kind_of? Array
-    return d.map{|v| encrypt_any(r,v,ctx)}
+    return d.map{|v| encrypt_any(r,v,crypto)}
   elsif d.kind_of? Hash
-    d.each_key{|k| d[k] = encrypt_any(r,d[k],ctx)}
+    d.each_key{|k| d[k] = encrypt_any(r,d[k],crypto)}
     return d
   else
     raise Exception, "Expected String, Array, or Hash, got #{d.class}"
   end
 end
 
-def encrypt_text(r, plain, ctx)
+def encrypt_text(r, plain, crypto)
   begin
-    cipher = ctx.encrypt(GPGME::Key.find(:public, r), GPGME::Data.new(plain))
+    cipher = crypto.encrypt(plain, :recipients => r)
   rescue GPGME::Error => e
     $stderr.print("GPGME::Error: code: #{e.code} source: #{e.source} message: #{e.message}\n")
     raise e
